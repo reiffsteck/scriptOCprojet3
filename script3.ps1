@@ -3,8 +3,8 @@ param
         [string] $n=' '
 )
 
-# Recuperer la liste des groupes dont un utilisateur est membre
-# question interactif ou non
+# Recuperer la liste des groupes dont un seul utilisateur est membre soit en interactif ou depuis *.csv
+# question interactif , dans la ligne de commande indiqué le nom de l'utilisateur $n
 # dans le lancement du script donner le nom de l'utilisateur
 Function GetListeGrp() 
 {
@@ -19,7 +19,9 @@ Function GetListeGrp()
             if ($n -eq ' ' )
 
                 {
-                #importation depuis un fichier CSV 
+                # importation depuis un fichier CSV 
+                # un seul utilisateur dans le fichier CSV pour l'exemple du projet
+                # une seule ligne exporté depuis le fichier excel client
                 write-host "le chemin d'importation est connu  C:\Scripts\AD_USERS\usergroupe.csv"
                 $CSVFile = "C:\Scripts\AD_USERS\usergroupe.csv"
                 $CSVData = Import-CSV -Path $CSVFile -Delimiter ";" -Encoding UTF8 
@@ -32,11 +34,8 @@ Function GetListeGrp()
                             $UtilisateurLogin = ($UtilisateurPrenom).Substring(0, 1) + $UtilisateurNom
                             Write-Host " les groupes dont l'utilisateur " $UtilisateurLogin "est membre sont: " -ForegroundColor Red
                             Get-ADPrincipalGroupMembership -Identity $UtilisateurLogin | Select-Object Name 
-                            # probleme de temps de reaction entre l'affichage et la commande
-                            #Write-Host " "
-                            #Write-Host "Fin de la liste des groupes de "$UtilisateurLogin -ForegroundColor Green
-                            #Write-Host " "
-                            #Write-Host " "
+                            
+                            
                         }
                 }
             else 
