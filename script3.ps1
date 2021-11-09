@@ -13,6 +13,7 @@ Function GetListeGrp()
         [string] $UtilisateurPrenom ,
         [string] $UtilisateurNom  ,
         [string] $UtilisateurLogin ,
+        [string] $UtilisateurExist,
         [string] $n
     )
 
@@ -32,18 +33,39 @@ Function GetListeGrp()
                             $UtilisateurPrenom = $Utilisateur.Prenom
                             $UtilisateurNom = $Utilisateur.Nom
                             $UtilisateurLogin = ($UtilisateurPrenom).Substring(0, 1) + $UtilisateurNom
-                            Write-Host " les groupes dont l'utilisateur " $UtilisateurLogin "est membre sont: " -ForegroundColor Red
-                            Get-ADPrincipalGroupMembership -Identity $UtilisateurLogin | Select-Object Name 
-                            
-                            
+
+                            # verification si l'utilisateur existe
+        $UtilisateurExist = $UtilisateurLogin
+        if ($UtilisateurExist = Get-ADUser -Filter { SamAccountName -eq $UtilisateurLogin }) 
+     
+      {
+          Write-Output "le login est" $UtilisateurLogin "l'utilisateur existe"
+          Write-Host " les groupes dont l'utilisateur " $UtilisateurLogin "est membre sont: " -ForegroundColor Red
+          Get-ADPrincipalGroupMembership -Identity $UtilisateurLogin | Select-Object Name -ErrorAction SilentlyContinue
+      }
+      else
+        {
+          Write-Output "le login est" $UtilisateurLogin "l'utilisateur nexiste pas"
+          exit              
+        }
                         }
                 }
             else 
                 {
                 #paramétre inclus dans l'appel du script 
                 # nom de l'utilisateur dans le lancement du script
+                # verification si l'utilisateur existe
+                $UtilisateurExist = $n
+                if ($UtilisateurExist = Get-ADUser -Filter { SamAccountName -eq $n })
+                {
                 Write-Output " les groupes dont l'utilisateur " $n "est membre sont: " 
-                Get-ADPrincipalGroupMembership -Identity $n | Select-Object SamAccountName
+                Get-ADPrincipalGroupMembership -Identity $n | Select-Object SamAccountName -ErrorAction SilentlyContinue
+                }
+                else
+                {
+                Write-Output "le login est" $UtilisateurLogin "l'utilisateur nexiste pas"
+                exit              
+                }
                 }
 }
 
