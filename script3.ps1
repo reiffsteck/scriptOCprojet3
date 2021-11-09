@@ -26,8 +26,6 @@ Function GetListeGrp()
                 write-host "le chemin d'importation est connu  C:\Scripts\AD_USERS\usergroupe.csv"
                 $CSVFile = "C:\Scripts\AD_USERS\usergroupe.csv"
                 $CSVData = Import-CSV -Path $CSVFile -Delimiter ";" -Encoding UTF8 
-                Write-Host "Fichier Importé"
-
                 Foreach ($Utilisateur in $CSVData)
                         {
                             $UtilisateurPrenom = $Utilisateur.Prenom
@@ -37,17 +35,16 @@ Function GetListeGrp()
                             # verification si l'utilisateur existe
         $UtilisateurExist = $UtilisateurLogin
         if ($UtilisateurExist = Get-ADUser -Filter { SamAccountName -eq $UtilisateurLogin }) 
-     
       {
           Write-Output "le login est" $UtilisateurLogin "l'utilisateur existe"
           Write-Host " les groupes dont l'utilisateur " $UtilisateurLogin "est membre sont: " -ForegroundColor Red
           Get-ADPrincipalGroupMembership -Identity $UtilisateurLogin | Select-Object Name -ErrorAction SilentlyContinue
       }
       else
-        {
+      {
           Write-Output "le login est" $UtilisateurLogin "l'utilisateur nexiste pas"
           exit              
-        }
+      }
                         }
                 }
             else 
