@@ -49,8 +49,7 @@ Function GetListeGrp()
                 }
             else 
                 {
-                #paramétre inclus dans l'appel du script 
-                # nom de l'utilisateur dans le lancement du script
+                #paramétre inclus dans l'appel du script, nom de l'utilisateur dans le lancement du script
                 # verification si l'utilisateur existe
                 $UtilisateurExist = $n
                 if ($UtilisateurExist = Get-ADUser -Filter { SamAccountName -eq $n })
