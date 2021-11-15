@@ -1,8 +1,11 @@
 param 
 (
         [string] $n=' '
+       
 )
 
+$ErrorActionPreference = "SilentlyContinue"
+$Error.Clear()  #purge des erreurs
 # Recuperer la liste des groupes dont un seul utilisateur est membre soit en interactif ou depuis *.csv
 # question interactif , dans la ligne de commande indiqué le nom de l'utilisateur $n
 # dans le lancement du script donner le nom de l'utilisateur
@@ -20,6 +23,7 @@ Function GetListeGrp()
             if ($n -eq ' ' )
 
                 {
+               
                 # importation depuis un fichier CSV 
                 # un seul utilisateur dans le fichier CSV pour l'exemple du projet
                 # une seule ligne exporté depuis le fichier excel client
@@ -37,8 +41,9 @@ Function GetListeGrp()
         if ($UtilisateurExist = Get-ADUser -Filter { SamAccountName -eq $UtilisateurLogin }) 
       {
           Write-Output "le login est" $UtilisateurLogin "l'utilisateur existe"
-          Write-Host " les groupes dont l'utilisateur " $UtilisateurLogin "est membre sont: " -ForegroundColor Red
+          Write-Host " les groupes dont l'utilisateur " $UtilisateurLogin "est membre sont: " 
           Get-ADPrincipalGroupMembership -Identity $UtilisateurLogin | Select-Object Name -ErrorAction SilentlyContinue
+          SortieErreur
       }
       else
       {
@@ -49,6 +54,7 @@ Function GetListeGrp()
                 }
             else 
                 {
+                
                 #paramétre inclus dans l'appel du script, nom de l'utilisateur dans le lancement du script
                 # verification si l'utilisateur existe
                 $UtilisateurExist = $n
@@ -56,6 +62,7 @@ Function GetListeGrp()
                 {
                 Write-Output " les groupes dont l'utilisateur " $n "est membre sont: " 
                 Get-ADPrincipalGroupMembership -Identity $n | Select-Object SamAccountName -ErrorAction SilentlyContinue
+                SortieErreur
                 }
                 else
                 {
@@ -63,6 +70,27 @@ Function GetListeGrp()
                 exit              
                 }
                 }
+}
+
+Function SortieErreur( )
+{
+    param ()
+
+    
+    if($Error.Count -ieq 0)
+    {
+   
+     Write-Output "Code de sortie" $error[0] #affichage erreur
+    $LastExitCode
+    }
+
+    Else
+    {
+        Write-Host "Erreur:"
+        Write-Host $error[0] #affichage erreur
+        $LastexitCode
+        exit
+    }
 }
 
 GetListeGrp -n $n
