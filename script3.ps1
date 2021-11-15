@@ -80,7 +80,7 @@ Function SortieErreur( )
     if($Error.Count -ieq 0)
     {
    
-     Write-Output "Code de sortie" $error[0] #affichage erreur
+     Write-Output "Pas de Code de sortie en Erreur" $error[0] #affichage erreur
     $LastExitCode
     }
 
