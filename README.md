@@ -43,6 +43,9 @@ Le fichier usergroupe.csv se compose du Nom, Prenom comme titre. Le fichier CSV 
 
 Si l'argument n'est pas vide, nom d'un seul utilisateur. Le script donne le nom des groupes de l'utilisateur que l'on désire. Ensuite on obtient le résultat demandé.
 
+Ajout d'une condition, qui teste s'il y a une erreur dans le déroulement du script.
+Elle renvoi un code ok , si tout c'est dérouler correctement, ou un code 1 en cas d'erreur, avec l'explication de l'erreur $error[0] et éventuellement le code de la commande incorrecte, renvoi les Exit Code de la commande. 
+
 ***
 
 # Fabriqué 
